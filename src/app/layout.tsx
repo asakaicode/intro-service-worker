@@ -13,8 +13,11 @@ export default function RootLayout({
       if ('serviceWorker' in navigator && 'PushManager' in window) {
         try {
           const registration = await navigator.serviceWorker.register(
-            '/public/serviceWorker.ts',
+            '/serviceWorker.js',
           )
+
+          // サービスワーカーの登録が完了するのを待つ
+          await navigator.serviceWorker.ready
 
           // Push通知購読
           const subscription = await registration.pushManager.subscribe({
@@ -24,16 +27,7 @@ export default function RootLayout({
             ),
           })
 
-          // Push通知購読情報をサーバーに送信
-          await fetch('/api/push/register', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              subscription,
-            }),
-          })
+          console.log(JSON.stringify(subscription))
         } catch (error) {
           console.error('Service Worker registration failed:', error)
         }
