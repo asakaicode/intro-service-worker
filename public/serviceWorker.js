@@ -1,4 +1,4 @@
-self.addEventListener('push', (event: PushEvent) => {
+self.addEventListener('push', (event) => {
   if (event.data) {
     const body = event.data.text()
     const options = {
